@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Window</title>
+</head>
+<body>
+    <h1>TODOs</h1>
+    <button class="clear">Clear</button>
+    <ul class="todos"></ul>
+</body>
+
+<script>
+    const electron = require("electron");
+    const {ipcRenderer} = electron;
+
+    const ul = document.querySelector(".todos");
+    const clear = document.querySelector(".clear");
+
+    if (ul.childElementCount === 0) {
+        clear.style.display = 'none';
+    }
+
+    clear.addEventListener("click" , (evt) => {
+        ul.innerHTML = '';
+        clear.style.display = 'none';
+    })
+    
+    ipcRenderer.on("todo:add" , (evt , newTodo) => {
+        const li = document.createElement("li");
+        li.innerHTML = newTodo;
+        ul.append(li);
+        clear.style.display = 'block';
+    })
+</script>
+
+</html>
